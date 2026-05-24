@@ -12,13 +12,21 @@ class ProjectSettings:
     def __init__(self):
         self.clear()
 
-    def clear(self):
+    def clear_orig(self):
         self.project_name = None
         self.project_path = None
         self.project_json_path = None
         self.domain_db_path = None
         self.meteo_db_path = None
         self.run_folder_path = None
+
+    def clear(self):
+        self.project_name = "Sample"
+        self.project_path = "D:\projects\Flood_Model\Sample"
+        self.project_json_path = Path(self.project_path) / "project.json"
+        self.domain_db_path = Path(self.project_path) / "domain_db"
+        self.meteo_db_path = Path(self.project_path) / "meteo_db"
+        self.run_folder_path = Path(self.project_path) / "run_folder"
 
     def register_project(self, project_config, project_json_path):
         project = project_config.get("project", {})

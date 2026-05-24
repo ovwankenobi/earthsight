@@ -48,6 +48,7 @@ class Domain(QFrame):
         self.setObjectName("domainSection")
         self.domain_buttons = {}
         self.selected_domain_json_path = None
+        self.domain_selected_callback = None
 
         self.domain_label = QLabel("Domain")
         self.domain_label.setObjectName("sidebarSectionLabel")
@@ -221,6 +222,9 @@ class Domain(QFrame):
 
         for domain_json_path, button in self.domain_buttons.items():
             button.setChecked(domain_json_path == self.selected_domain_json_path)
+
+        if self.domain_selected_callback is not None:
+            self.domain_selected_callback()
 
 
 class NewDomainDialog(QDialog):

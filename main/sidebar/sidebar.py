@@ -20,7 +20,7 @@ class Sidebar(QFrame):
 
         self.domain = Domain()
         self.project_button = Project()
-        self.project_button.project_changed_callback = self.domain.display_domains
+        self.project_button.project_changed.connect(self.domain.display_domains)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(12, 16, 12, 16)

@@ -8,17 +8,18 @@ Created on Sun May 24, 2026
 import json
 from pathlib import Path
 
-from PySide6.QtCore import QPoint
+from PySide6.QtCore import QPoint, Signal
 from PySide6.QtWidgets import QFileDialog, QInputDialog, QMenu, QMessageBox, QPushButton
 
 from main import project_settings
 
 
 class Project(QPushButton):
+    project_changed = Signal()
+
     def __init__(self, parent=None):
         super().__init__("Project", parent)
         self.project_name = None
-        self.project_changed_callback = None
         self.setObjectName("sidebarButton")
         self.clicked.connect(self.show_project_menu)
 
@@ -122,7 +123,7 @@ class Project(QPushButton):
         )
         project_settings.register_project(project_config, project_json_path)
         self.set_project_name(project_name)
-        self.notify_project_changed()
+        self.project_changed.emit()
 
     def load_proj(self):
         project_folder = QFileDialog.getExistingDirectory(
@@ -163,12 +164,8 @@ class Project(QPushButton):
         )
         project_settings.register_project(project_config, project_json)
         self.set_project_name(project_name)
-        self.notify_project_changed()
+        self.project_changed.emit()
 
     def set_project_name(self, project_name):
         self.project_name = project_name
         self.setText(f"Project ({project_name})")
-
-    def notify_project_changed(self):
-        if self.project_changed_callback is not None:
-            self.project_changed_callback()

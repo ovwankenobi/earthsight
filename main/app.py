@@ -12,10 +12,12 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QMainWindow,
+    QStackedWidget,
     QVBoxLayout,
     QWidget,
 )
 
+from domain_builder.domain_window import DomainWindow
 from header import Header
 from sidebar.sidebar import Sidebar
 
@@ -29,8 +31,12 @@ class MainWindow(QMainWindow):
         self.header = Header()
         self.sidebar = Sidebar()
         self.sidebar.hide()
+        self.sidebar.domain.domain_selected_callback = self.show_domain_window
+
         self.status_label = QLabel("Select Project or Domain from the sidebar.")
         self.status_label.setObjectName("statusLabel")
+        self.content_stack = QStackedWidget()
+        self.content_stack.addWidget(self.status_label)
 
         self.header.sidebar_toggled.connect(self.toggle_sidebar)
 
@@ -44,7 +50,7 @@ class MainWindow(QMainWindow):
         body_layout.setContentsMargins(0, 0, 0, 0)
         body_layout.setSpacing(0)
         body_layout.addWidget(self.sidebar)
-        body_layout.addWidget(self.status_label, stretch=1)
+        body_layout.addWidget(self.content_stack, stretch=1)
 
         layout = QVBoxLayout(content)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -73,6 +79,11 @@ class MainWindow(QMainWindow):
 
     def toggle_sidebar(self):
         self.sidebar.setVisible(not self.sidebar.isVisible())
+
+    def show_domain_window(self):
+        domain_window = DomainWindow()
+        self.content_stack.addWidget(domain_window)
+        self.content_stack.setCurrentWidget(domain_window)
 
 
 def main():
